@@ -15,20 +15,20 @@
 
 int found_newline(t_list *list)
 {
-    int i;
+    int i; // Variabile per iterare all'interno del buffer di ogni nodo della lista,  Contatore che scorrerà i caratteri nel buffer dei nodi.
 
     if (NULL == list)
         return (0);
     while (list)
     {
-        i = 0;
+        i = 0; // riparti sempre da zero per ogni nodo della lista 
         while (list->str_buf[i] && i < BUFFER_SIZE)
         {
             if (list->str_buf[i] == '\n')
                 return (1);
                 ++i;
         }
-        list = list->next;
+        list = list->next; //passa al nodo successivo
     }
     return (0);
 }
@@ -69,11 +69,14 @@ void    copy_str(t_list *list, char *str)
 }
 
 // find the len to new line in the linked list
+// Conta quanti caratteri ci sono fino al \n (incluso), così sappiamo quanto spazio allocare.
+// Conta carattere per carattere fino a trovare \n o terminare la lista.
+// Restituisce la lunghezza esatta della linea, incluso \n.
 
 int len_to_newline(t_list *list)
 {
-    int i;
-    int len;
+    int i; //Iteratore per scorrere i caratteri nel nodo
+    int len; //Conta il numero totale di caratteri fino al \n.
 
     if (NULL == list)
         return (0);
@@ -82,17 +85,17 @@ int len_to_newline(t_list *list)
     while (list)
     {
         i = 0;
-        while (list->str_buf[i]) // while the char inside the string of the node is not zero
+        while (list->str_buf[i]) // while the char inside the string of the node is not zero, Scorre i caratteri nel buffer del nodo corrente
         {
-            if (list->str_buf[i] == '\n') //check if the char is the newline 
+            if (list->str_buf[i] == '\n') //check if the char is the newline, Se trova \n, lo conta e termina
             {
-                ++len; // yes, you prefix-increse len, you want to include the newline 
+                ++len; // yes, you prefix-increse len, you want to include the newline , Conta anche il \n
                 return (len);
             }
             ++i;
-            ++len;
+            ++len; //Aggiunge il carattere alla lunghezza
         }
-        list = list->next; //it leads me to the final node
+        list = list->next; //it leads me to the next node
     }
     return (len);
 }
