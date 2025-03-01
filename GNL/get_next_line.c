@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 void    create_list(t_list **list, int fd);
-void dealloc(t_list **list, t_list *clean_node, char *buf);
+void    dealloc(t_list **list, t_list *clean_node, char *buf);
 char    *get_line(t_list *list);
 void    polish_list(t_list **list);
 
@@ -28,7 +28,7 @@ char *get_next_line(int fd)
 
     list = NULL; /////errore
 
-    // fd only can be positive | read gives -1 if some problems while reading) | if you have the permissions to open the file 
+    // fd only can be positive | read gives -1 if some problems while reading | if you have the permissions to open the file 
     if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
         return (NULL);
 
