@@ -20,7 +20,7 @@ int main(void)
     int fd;
     char *line;
     
-    fd = open("text.txt", O_RDONLY);
+    fd = open("text2.txt", O_RDONLY);
     if (fd == -1)
 	{
 		printf("Error opening the file, try again.\n");
