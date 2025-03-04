@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frea <frea@student.42berlin.de>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	create_list(t_list **list, int fd);
 void	dealloc(t_list **list, t_list *clean_node, char *buf);
 char	*get_line(t_list *list);
 void	polish_list(t_list **list);
-void	append(t_list **list, char *buf);
+void	append(t_list **list, char *buf, int fd);
 char	*get_next_line(int fd);
 
 /*
@@ -73,12 +73,12 @@ char	*get_line(t_list *list)
 
 /* To append one node to the next of the list*/
 
-void	append(t_list **list, char *buf)
+void	append(t_list **list, char *buf, int fd)
 {
 	t_list	*new_node;
 	t_list	*last_node;
 
-	last_node = find_last_node(*list);
+	last_node = find_last_node(list[fd]);
 	new_node = malloc(sizeof(t_list));
 	if (new_node == NULL)
 	{
@@ -86,7 +86,7 @@ void	append(t_list **list, char *buf)
 		exit(EXIT_FAILURE);
 	}
 	if (last_node == NULL)
-		*list = new_node;
+		list[fd] = new_node;
 	else
 		last_node->next = new_node;
 	new_node->str_buf = buf;
@@ -105,7 +105,7 @@ void	create_list(t_list **list, int fd)
 	int		char_read;
 	char	*buf;
 
-	while (!found_newline(*list))
+	while (!found_newline(list[fd]))
 	{
 		buf = malloc ((BUFFER_SIZE + 1) * sizeof(char));
 		if (buf == NULL)
@@ -118,7 +118,7 @@ void	create_list(t_list **list, int fd)
 			return ;
 		}
 		buf[char_read] = '\0';
-		append(list, buf);
+		append(list, buf, fd);
 	}
 }
 
@@ -131,15 +131,17 @@ void	create_list(t_list **list, int fd)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list;
+	static t_list	*list[5678];
 	char			*next_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 5678 || BUFFER_SIZE <= 0)
 		return (NULL);
-	create_list(&list, fd);
-	if (list == NULL)
+	create_list(list, fd);
+	if (!list[fd])
+		list[fd] = NULL;
+	if (list[fd] == NULL)
 		return (NULL);
-	next_line = get_line(list);
-	polish_list(&list);
+	next_line = get_line(list[fd]);
+	polish_list(&list[fd]);
 	return (next_line);
 }
