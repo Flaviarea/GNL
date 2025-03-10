@@ -21,7 +21,7 @@ int	found_newline(t_list *list)
 {
 	int	i;
 
-	if (list == NULL)
+	if (!list)
 		return (0);
 	while (list)
 	{
@@ -29,8 +29,8 @@ int	found_newline(t_list *list)
 		while (list->str_buf[i] && i < BUFFER_SIZE)
 		{
 			if (list->str_buf[i] == '\n')
-				return (-1);
-			++i;
+				return (1);
+			i++;
 		}
 		list = list->next;
 	}

@@ -58,14 +58,14 @@ void	polish_list(t_list **list)
 
 char	*get_line(t_list *list)
 {
-	int		str_len;
 	char	*next_str;
+	int		str_len;
 
-	if (list == NULL)
+	if (!list)
 		return (NULL);
 	str_len = len_to_newline(list);
 	next_str = malloc (str_len + 1);
-	if (next_str == NULL)
+	if (!next_str)
 		return (NULL);
 	copy_str(list, next_str);
 	return (next_str);
@@ -108,11 +108,10 @@ void	create_list(t_list **list, int fd)
 	while (!found_newline(list[fd]))
 	{
 		buf = malloc ((BUFFER_SIZE + 1) * sizeof(char));
-		if (buf == NULL)
+		if (!buf)
 			return ;
-		buf[0] = '\0';
 		char_read = read (fd, buf, BUFFER_SIZE);
-		if (char_read < 0)
+		if (!char_read)
 		{
 			free(buf);
 			return ;
@@ -134,12 +133,10 @@ char	*get_next_line(int fd)
 	static t_list	*list[5678];
 	char			*next_line;
 
-	if (fd < 0 || fd > 5678 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 5678 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);
 	create_list(list, fd);
 	if (!list[fd])
-		list[fd] = NULL;
-	if (list[fd] == NULL)
 		return (NULL);
 	next_line = get_line(list[fd]);
 	polish_list(&list[fd]);

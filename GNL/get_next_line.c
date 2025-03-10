@@ -102,17 +102,16 @@ void	append(t_list **list, char *buf)
 
 void	create_list(t_list **list, int fd)
 {
-	int		char_read;
+	ssize_t	char_read;
 	char	*buf;
 
 	while (!found_newline(*list))
 	{
 		buf = malloc ((BUFFER_SIZE + 1) * sizeof(char));
-		if (buf == NULL)
+		if (!buf)
 			return ;
-		buf[0] = '\0';
 		char_read = read (fd, buf, BUFFER_SIZE);
-		if (char_read < 0)
+		if (!char_read)
 		{
 			free(buf);
 			return ;
@@ -131,13 +130,13 @@ void	create_list(t_list **list, int fd)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list;
+	static t_list	*list = NULL;
 	char			*next_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);
 	create_list(&list, fd);
-	if (list == NULL)
+	if (!list)
 		return (NULL);
 	next_line = get_line(list);
 	polish_list(&list);

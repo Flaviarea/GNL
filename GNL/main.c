@@ -13,9 +13,9 @@
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <fcntl.h> // Necessario per open()
+#include <fcntl.h>
 
-int main(void)
+/*int main(void)
 {
     int fd;
     char *line;
@@ -23,22 +23,56 @@ int main(void)
     fd = open("text.txt", O_RDONLY);
     if (fd == -1)
 	{
-		printf("Error opening the file, try again.\n");
+		printf("Error.\n");
 		return (1);
 	}
-    printf("BUFFER_SIZE = %d\n", BUFFER_SIZE);
     while(1)
     {
         line = get_next_line(fd);
-        printf("%s", line);
-        if (line == NULL)
+    if (line)
+    printf("%s", line);
+       if (!line)
         {
-            printf("%s", line);
             free(line);
             break;
         }
     }
-    printf("\n");
+    	    free(line);
 	close(fd);
 	return(0);
 }
+*/
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(void)
+{
+    int fd;
+    char *line;
+
+    fd = open("text.txt", O_RDONLY);
+    if (fd == -1)
+    {
+        printf("Error.\n");
+        return (1);
+    }
+
+    while (1)
+    {
+        line = get_next_line(fd); 
+
+        if (!line) 
+        {
+            break;
+        }
+        printf("%s", line);
+        free(line);
+    }
+
+    close(fd);
+    return (0);
+}
+
